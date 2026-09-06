@@ -34,7 +34,25 @@ nav.top{position:sticky;top:0;z-index:100;display:flex;align-items:center;justif
 .navlinks a{text-decoration:none;opacity:.85}
 .navlinks a:hover{opacity:1}
 .navlinks a.active{color:var(--cognitions);opacity:1;font-weight:600}
-@media(max-width:720px){.navlinks{display:none}}
+@media(max-width:720px){
+  nav.top{padding:10px 16px}
+  /* keep a usable header: links become a horizontal swipe strip */
+  .navlinks{display:flex;flex:1;min-width:0;overflow-x:auto;gap:16px;margin:0 10px;font-size:13px;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .navlinks a{white-space:nowrap}
+  .navlinks::-webkit-scrollbar{display:none}
+  .navback{display:none}
+  /* filter bar: each control becomes one swipeable row instead of a tall wrapping block */
+  .controls{top:46px;padding:10px 0}
+  .control-row + .control-row{margin-top:8px}
+  #pillarTabs,#modTabs{flex-wrap:nowrap!important;overflow-x:auto;flex:1 1 0!important;min-width:0;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
+  #pillarTabs::-webkit-scrollbar,#modTabs::-webkit-scrollbar{display:none}
+  .tab,.chip-f{flex-shrink:0}
+  .searchbox{max-width:none}
+  .ivx{grid-template-columns:1fr}
+  .hero{padding:48px 0 40px}
+}
 
 /* hero */
 .hero{background:radial-gradient(120% 100% at 80% 0,#1b2336,#0b0e16 60%);color:#fff;padding:70px 0 56px}
@@ -100,7 +118,7 @@ footer a{color:rgba(255,255,255,.85)}
     <a href="interventions.html" class="active">Interventions</a>
     <a href="index.html#use">In Practice</a>
   </div>
-  <a href="index.html" class="tab" style="padding:8px 14px">← Back to model</a>
+  <a href="index.html" class="tab navback" style="padding:8px 14px">← Back to model</a>
 </nav>
 
 <header class="hero">
@@ -184,7 +202,8 @@ const MODALITY_COLORS = {
   "Medical":"#0ea5e9",
   "Metabolic / Lifestyle":"#16a34a",
   "Psychoeducation":"#4f46e5",
-  "Compassion-Focused":"#db2777"
+  "Compassion-Focused":"#db2777",
+  "IFS":"#9333ea"
 };
 const DEFAULT_MOD_COLOR = "#64748b";
 
@@ -211,7 +230,9 @@ const DATA = [
     { name:"Psychoeducation", modality:"Psychoeducation", how:"Accurate frameworks replace inaccurate or missing knowledge." },
     { name:"Values exploration", modality:"ACT", how:"Clarifying values reshapes which concepts guide behavior." },
     { name:"Schema Therapy", modality:"Psychodynamic", how:"Targets early maladaptive schemas formed in development." },
-    { name:"Reframing / new linguistic frames", modality:"CBT", how:"New language re-categorizes an experience and its meaning." }
+    { name:"Reframing / new linguistic frames", modality:"CBT", how:"New language re-categorizes an experience and its meaning." },
+    { name:"Corrective Experiences", modality:"Exposure", how:"Find experiences with environments, people, animals, or activities that have positive or tolerable outcomes." },
+    { name:"Bibliotherapy", modality:"Psychoeducation", how:"Recommend helpful literature or media that provides corrective education and reframing." }
   ]},
 { pillar:"cognitions", target:"Cognitive Distortions",
   why:"Systematic thinking errors bias information processing and keep predictive models misaligned with reality, sustaining stress reactivity.",
@@ -233,7 +254,9 @@ const DATA = [
     { name:"Willingness exercises", modality:"ACT", how:"Practice openness to experience rather than avoidance." },
     { name:"Mindfulness practice", modality:"Mindfulness", how:"Present-moment, nonjudgmental contact with what is." },
     { name:"Grief processing", modality:"Psychodynamic", how:"Mourn the gap between expectation and reality to move forward." },
-    { name:"Acceptance vs. approval psychoeducation", modality:"Psychoeducation", how:"Clarify that accepting reality is not endorsing it." }
+    { name:"Acceptance vs. approval psychoeducation", modality:"Psychoeducation", how:"Clarify that accepting reality is not endorsing it." },
+    { name:"Accurate In-Depth Education", modality:"Psychoeducation", how:"Understanding how the natural or man-made world functions can help with acceptance of reality." },
+    { name:"Parts Work", modality:"IFS", how:"Discover 'parts' resistant to radical acceptance." }
   ]},
 { pillar:"cognitions", target:"Attention Regulation",
   why:"Where attention goes shapes prediction. Affect-biased attention and hypervigilance maintain disordered states; attentional control is trainable and builds top-down regulation.",
@@ -255,7 +278,8 @@ const DATA = [
     { name:"Committed action", modality:"ACT", how:"Link concrete behavior to chosen values." },
     { name:"Behavioral activation", modality:"Behavioral", how:"Action first — engagement builds motivation, not the reverse." },
     { name:"Building Mastery", modality:"DBT", how:"Scheduled competence-building tasks raise agency." },
-    { name:"Growth-mindset / grit coaching", modality:"Psychoeducation", how:"Frame effort and setbacks as part of learning." }
+    { name:"Growth-mindset / grit coaching", modality:"Psychoeducation", how:"Frame effort and setbacks as part of learning." },
+    { name:"Parts Work", modality:"IFS", how:"Discover which 'parts' may be in conflict over goals." }
   ]},
 { pillar:"cognitions", target:"Respondent Conditioning",
   why:"Learned associations drive automatic emotional and physiological reactions that operate outside conscious control — and that cognition alone often can't reach.",
@@ -267,7 +291,8 @@ const DATA = [
     { name:"Interoceptive exposure", modality:"Exposure", how:"Expose feared bodily sensations (panic)." },
     { name:"EMDR", modality:"Trauma-Focused", how:"Reprocess distressing memories to update associations." },
     { name:"Inhibitory-learning exposure", modality:"Exposure", how:"Maximize expectancy violation to build new safety learning." },
-    { name:"Behavioral activation", modality:"Behavioral", how:"Re-approach avoided activities to disconfirm predictions." }
+    { name:"Behavioral activation", modality:"Behavioral", how:"Re-approach avoided activities to disconfirm predictions." },
+    { name:"Corrective Experiences", modality:"Exposure", how:"Find experiences with environments, people, animals, or activities that have positive or tolerable outcomes." }
   ]},
 
 { pillar:"allostatic", target:"Control / Demand / Predictability",
@@ -281,7 +306,11 @@ const DATA = [
     { name:"Mindfulness on the controllable", modality:"Mindfulness", how:"Anchor attention to present, actionable elements." },
     { name:"Stress-response medication", modality:"Psychiatric", how:"e.g., beta-blockers/alpha-2 agonists to dampen arousal." },
     { name:"Environmental modification", modality:"Systemic", how:"Change the demand load via resources and case management." },
-    { name:"Acceptance strategies", modality:"ACT", how:"Reduce the added load of struggling with the uncontrollable." }
+    { name:"Acceptance strategies", modality:"ACT", how:"Reduce the added load of struggling with the uncontrollable." },
+    { name:"Building Self-Efficacy", modality:"CBT", how:"Build the belief that one can respond to the unpredictable or uncontrollable in effective ways." },
+    { name:"Building Mastery", modality:"DBT", how:"Build mastery over specific stressors." },
+    { name:"Specific Non-Therapy Skill Building", modality:"Behavioral", how:"e.g., help a client learn self-defense so they don't feel unsafe." },
+    { name:"Parts Work", modality:"IFS", how:"Discover 'parts' wanting control/predictability and avoiding demand." }
   ]},
 { pillar:"allostatic", target:"Evaluation of Performance",
   why:"The SNS mobilizes us toward performance; a poor relationship with performance or unmet unrealistic demands creates sustained arousal where effort undermines outcomes.",
@@ -292,7 +321,10 @@ const DATA = [
     { name:"Building Mastery", modality:"DBT", how:"Graded successes rebuild a realistic sense of competence." },
     { name:"Biofeedback", modality:"Somatic", how:"Make performance-related arousal visible and trainable." },
     { name:"Self-compassion training", modality:"Compassion-Focused", how:"Replace harsh self-criticism with a supportive inner stance." },
-    { name:"Mistake / 'good-enough' exposure", modality:"Exposure", how:"Deliberately tolerate imperfect performance." }
+    { name:"Mistake / 'good-enough' exposure", modality:"Exposure", how:"Deliberately tolerate imperfect performance." },
+    { name:"Reframe Failure as an Indicator of Growth", modality:"CBT", how:"Errors are the trigger for neuroplasticity and learning." },
+    { name:"EMDR", modality:"Trauma-Focused", how:"Target themes and memories of 'performance'." },
+    { name:"Parts Work", modality:"IFS", how:"Discover 'parts' with attachment to outcomes." }
   ]},
 { pillar:"allostatic", target:"Social Hierarchy",
   why:"The SNS is naturally sensitive to social rank — higher arousal when perceived as lower-status. An under-discussed driver of self-worth struggles, rejection sensitivity, and chronic dysregulation.",
@@ -304,7 +336,16 @@ const DATA = [
     { name:"Radical Acceptance of status", modality:"DBT", how:"Accept current standing to lower chronic threat arousal." },
     { name:"Mindfulness of comparison", modality:"Mindfulness", how:"Notice comparison urges without acting on them." },
     { name:"Defense exploration", modality:"Psychodynamic", how:"Surface immature defenses tied to self/other-image." },
-    { name:"Being of value to others", modality:"Behavioral", how:"Prosocial contribution restores a felt sense of worth." }
+    { name:"Being of value to others", modality:"Behavioral", how:"Prosocial contribution restores a felt sense of worth." },
+    { name:"Self-Validation", modality:"DBT", how:"Internalize your own positive value and hold it without needing others to confirm it." },
+    { name:"Self-Gratitude", modality:"CBT", how:"Acknowledge what you've contributed to the lives of others." },
+    { name:"Exposure to Being Lesser", modality:"Exposure", how:"Tolerate being 'lowered' on the social ladder so it doesn't drive reactions elsewhere." },
+    { name:"Neutralization of Rank", modality:"Mindfulness", how:"Common in Buddhism, the Yogic practice of Shunya, Transpersonal Psychotherapy, and Relational-Cultural Therapy." },
+    { name:"Psilocybin-Assisted Ego-Death", modality:"Psychiatric", how:"Using psilocybin to help scaffold letting go of social rank." },
+    { name:"Accepting Love/Affection", modality:"Exposure", how:"Find others who care and allow that care to be felt." },
+    { name:"EMDR", modality:"Trauma-Focused", how:"Target themes and memories of 'feeling lesser'." },
+    { name:"Mentalization-Based Treatment", modality:"Psychodynamic", how:"Build the capacity to understand that everyone will see you differently." },
+    { name:"Parts Work", modality:"IFS", how:"Discover and soothe 'parts' that need recognition or fear being lesser." }
   ]},
 { pillar:"allostatic", target:"Sympathetic Learning History / Trauma",
   why:"Trauma sensitizes the nervous system to threat, producing rigid autonomic states and overgeneralized danger cues that persist long after events. No formulation is complete without evaluating it.",
@@ -316,7 +357,10 @@ const DATA = [
     { name:"Somatic Experiencing", modality:"Somatic", how:"Discharge and regulate stuck autonomic activation." },
     { name:"Grounding & stabilization", modality:"DBT", how:"Skills to return to the window of tolerance." },
     { name:"Prazosin (nightmares)", modality:"Psychiatric", how:"Alpha-blocker that can reduce trauma nightmares." },
-    { name:"Corrective relational experience", modality:"Psychodynamic", how:"A safe relationship updates threat expectancies." }
+    { name:"Corrective relational experience", modality:"Psychodynamic", how:"A safe relationship updates threat expectancies." },
+    { name:"Support Groups", modality:"Group", how:"Shared experiences, mutual support, and bonding over survivorship." },
+    { name:"Meaning Making", modality:"CBT", how:"Re-author your story and put negative experiences in service of personal values." },
+    { name:"Parts Work", modality:"IFS", how:"Discover and soothe traumatized 'parts'." }
   ]},
 { pillar:"allostatic", target:"Chronic SNS Activation",
   why:"When stress mediators exceed coping capacity the system tips into allostatic overload — surfacing as the physical complaints that so often arrive on a therapist's couch.",
@@ -341,7 +385,8 @@ const DATA = [
     { name:"Stimulus control / scheduling", modality:"Behavioral", how:"Restructure cues and access to high-stimulation activities." },
     { name:"Contingency management", modality:"Behavioral", how:"Reinforce target behaviors with structured rewards (strong SUD evidence)." },
     { name:"Stimulant / dopamine modulators", modality:"Psychiatric", how:"Address hypodopaminergic states (e.g., ADHD)." },
-    { name:"Dopamine antagonists", modality:"Psychiatric", how:"For hyperdopaminergic states / psychosis." }
+    { name:"Dopamine antagonists", modality:"Psychiatric", how:"For hyperdopaminergic states / psychosis." },
+    { name:"Letting Go of Expectations", modality:"CBT", how:"Denied expectations cause a severe dopamine drop; reframing expectations reduces the crash." }
   ]},
 
 { pillar:"relationships", target:"Social Homeostatic Needs",
@@ -374,7 +419,11 @@ const DATA = [
     { name:"Affect-recognition training", modality:"Interpersonal", how:"Improve reading of others' emotional cues." },
     { name:"Functional Analytic Psychotherapy", modality:"Behavioral", how:"Use in-vivo feedback on interpersonal impact." },
     { name:"Mindfulness of impact", modality:"Mindfulness", how:"Notice one's effect on others in real time." },
-    { name:"Therapeutic-relationship feedback", modality:"Interpersonal", how:"The therapist offers direct, caring feedback." }
+    { name:"Therapeutic-relationship feedback", modality:"Interpersonal", how:"The therapist offers direct, caring feedback." },
+    { name:"Emotion-Focused Therapy", modality:"Interpersonal", how:"Help the client understand how attachment and emotions shape their relationships." },
+    { name:"Imago Relationship Therapy", modality:"Interpersonal", how:"Learn to send and receive messages within a relationship." },
+    { name:"Relational Life Therapy", modality:"Interpersonal", how:"Therapist directly addresses power dynamics in a relationship." },
+    { name:"Parts Work", modality:"IFS", how:"Discover how 'parts' may impact relationships." }
   ]},
 { pillar:"relationships", target:"Experiencing Connection",
   why:"The capacity to feel connection itself can be the target — for relational trauma, insecure attachment, alexithymia, or autism. Therapy can be a corrective, co-regulating experience.",
@@ -385,7 +434,9 @@ const DATA = [
     { name:"Emotionally Focused Therapy", modality:"Interpersonal", how:"Restructure bonding interactions in couples/families." },
     { name:"Therapist as model", modality:"Interpersonal", how:"Experience attuned responsiveness and co-regulation." },
     { name:"Graded intimacy exposure", modality:"Exposure", how:"Practice vulnerability at tolerable increments." },
-    { name:"Group therapy", modality:"Group", how:"Repeated experiences of being understood by peers." }
+    { name:"Group therapy", modality:"Group", how:"Repeated experiences of being understood by peers." },
+    { name:"Parallel Experience", modality:"Interpersonal", how:"Foster parallel experiences between individuals in and outside of therapy." },
+    { name:"Behavioral Activation (social)", modality:"Behavioral", how:"Engage socially and frequently to increase the odds of connection." }
   ]},
 
 { pillar:"purpose", target:"Meaning for Living",
@@ -396,7 +447,8 @@ const DATA = [
     { name:"Narrative Therapy", modality:"Existential", how:"Re-author a coherent, agentic life story." },
     { name:"Existential therapy", modality:"Existential", how:"Engage directly with meaning, freedom, and mortality." },
     { name:"Meaning-Centered Psychotherapy", modality:"Existential", how:"Structured work to cultivate sources of meaning." },
-    { name:"Logotherapy techniques", modality:"Existential", how:"Find meaning even within unavoidable suffering." }
+    { name:"Logotherapy techniques", modality:"Existential", how:"Find meaning even within unavoidable suffering." },
+    { name:"Internal Goal Setting", modality:"Existential", how:"What do you want to change in the world?" }
   ]},
 { pillar:"purpose", target:"Good Things Are Coming",
   why:"A global conviction that a positive future is possible. Without it, planning and effort feel hollow — distinct from, and deeper than, looking forward to specific events.",
@@ -406,7 +458,8 @@ const DATA = [
     { name:"Behavioral activation", modality:"Behavioral", how:"Action generates disconfirming, hopeful evidence." },
     { name:"Future Event Specificity Training", modality:"CBT", how:"Build vivid, specific positive future thinking." },
     { name:"Best-Possible-Self imagery", modality:"Positive Psychology", how:"Imagining a good future lifts optimism." },
-    { name:"Hope-focused psychoeducation", modality:"Psychoeducation", how:"Teach the mechanics of hope and expectancy." }
+    { name:"Hope-focused psychoeducation", modality:"Psychoeducation", how:"Teach the mechanics of hope and expectancy." },
+    { name:"Therapeutic Ketamine Use", modality:"Psychiatric", how:"May dampen lateral habenula activation and shift AMPA/NMDA receptor activity." }
   ]},
 { pillar:"purpose", target:"Agency Over Future",
   why:"Belief in influence over outcomes — an internal locus of control and an iterative mindset — sustains motivation and resilience. Its absence is learned helplessness.",
@@ -418,7 +471,8 @@ const DATA = [
     { name:"Building Mastery", modality:"DBT", how:"Accumulated competence rebuilds felt control." },
     { name:"Problem-solving therapy", modality:"CBT", how:"Demonstrate that action changes outcomes." },
     { name:"Self-efficacy experiments", modality:"Behavioral", how:"Structured wins prove capability to the client." },
-    { name:"Dialectical 'one step' focus", modality:"DBT", how:"Attend to the next action rather than the whole mountain." }
+    { name:"Dialectical 'one step' focus", modality:"DBT", how:"Attend to the next action rather than the whole mountain." },
+    { name:"Iterative Mindset Coaching", modality:"Psychoeducation", how:"Set aside overall progress and focus on moving in the desired direction." }
   ]},
 { pillar:"purpose", target:"Looking Forward to Experiences",
   why:"Anticipating positive experiences sustains the dopamine system and the sense that life is worth living. Anhedonia blunts the drive to pursue goals at all.",
@@ -428,7 +482,8 @@ const DATA = [
     { name:"Savoring interventions", modality:"Positive Psychology", how:"Amplify and prolong positive experience." },
     { name:"Mindfulness of pleasant events", modality:"Mindfulness", how:"Notice and register everyday positives." },
     { name:"Future Event Specificity Training", modality:"CBT", how:"Increase anticipatory pleasure through specificity." },
-    { name:"Positive Affect Treatment", modality:"CBT", how:"Directly target reward deficits and anhedonia." }
+    { name:"Positive Affect Treatment", modality:"CBT", how:"Directly target reward deficits and anhedonia." },
+    { name:"Pleasant Event Problem Solving", modality:"CBT", how:"Collaborate to explore potential positive experiences." }
   ]},
 { pillar:"purpose", target:"Purpose to Others",
   why:"Contributing to others builds self-worth and releases prosocial neuromodulators, lowering SNS activity and allostatic load. A frictionless modern world makes such roles harder to find.",
@@ -438,7 +493,8 @@ const DATA = [
     { name:"Community engagement", modality:"Systemic", how:"Build a valued role within a group." },
     { name:"ACCEPTS (contribute)", modality:"DBT", how:"Use contribution to shift distressing states." },
     { name:"ACT matrix", modality:"ACT", how:"Map values into prosocial committed action." },
-    { name:"Mentorship roles", modality:"Behavioral", how:"Being needed reinforces meaning and worth." }
+    { name:"Mentorship roles", modality:"Behavioral", how:"Being needed reinforces meaning and worth." },
+    { name:"Vocational Pursuits", modality:"Behavioral", how:"Explore how a role in society can provide purpose." }
   ]},
 
 { pillar:"metabolic", collab:true, target:"Substance Use",
@@ -451,7 +507,9 @@ const DATA = [
     { name:"Medication-assisted treatment", modality:"Medical", how:"e.g., naltrexone, buprenorphine for craving/withdrawal." },
     { name:"Harm reduction", modality:"Medical", how:"Reduce risk and harm when abstinence isn't the goal." },
     { name:"Mutual-help linkage", modality:"Systemic", how:"Connect to 12-step or alternative recovery communities." },
-    { name:"Functional analysis of use", modality:"Behavioral", how:"Map the function the substance serves, then meet it otherwise." }
+    { name:"Functional analysis of use", modality:"Behavioral", how:"Map the function the substance serves, then meet it otherwise." },
+    { name:"Naltrexone", modality:"Psychiatric", how:"Long-term maintenance medication for various substance use issues." },
+    { name:"Naloxone", modality:"Psychiatric", how:"Emergency reversal agent for active overdose." }
   ]},
 { pillar:"metabolic", collab:true, target:"Gut Microbiome (Probiotics / Prebiotics)",
   why:"Gut bacteria produce neurotransmitter precursors and short-chain fatty acids; a poor microbiome fuels inflammation and disrupts the gut-brain axis.",
@@ -493,7 +551,8 @@ const DATA = [
     { name:"Regular exercise", modality:"Metabolic / Lifestyle", how:"Reduces systemic inflammation over time." },
     { name:"Stress reduction", modality:"Mindfulness", how:"Lowering allostatic load reduces inflammatory signaling." },
     { name:"Sleep optimization", modality:"Metabolic / Lifestyle", how:"Restorative sleep dampens inflammation." },
-    { name:"Medical workup / supplementation", modality:"Medical", how:"Test markers and treat underlying causes." }
+    { name:"Medical workup / supplementation", modality:"Medical", how:"Test markers and treat underlying causes." },
+    { name:"Replenish Necessary Nutrients / Vitamins", modality:"Metabolic / Lifestyle", how:"Several deficiencies are common in high inflammation, such as Vitamin B1." }
   ]},
 { pillar:"metabolic", collab:true, target:"Physical Activity",
   why:"Among the most-researched interventions: movement modulates BDNF and neurotransmitters, builds metabolic resilience, and rivals therapy for some outcomes.",
@@ -503,7 +562,8 @@ const DATA = [
     { name:"Resistance training", modality:"Metabolic / Lifestyle", how:"Builds muscle, insulin sensitivity, and resilience." },
     { name:"Movement as behavioral activation", modality:"Behavioral", how:"Use activity to break withdrawal/avoidance cycles." },
     { name:"Exercise prescription (with PT)", modality:"Medical", how:"Collaborate for safe, tailored programming." },
-    { name:"Dance / group movement", modality:"Somatic", how:"Combines movement with social connection." }
+    { name:"Dance / group movement", modality:"Somatic", how:"Combines movement with social connection." },
+    { name:"Exercise Classes", modality:"Metabolic / Lifestyle", how:"Options range from pilates and yoga to boxing and cycling." }
   ]},
 { pillar:"metabolic", collab:true, target:"Sleep",
   why:"Sleep underwrites neuroplasticity, memory, and emotion regulation; every mental-health condition shows a relationship with disturbed sleep.",
@@ -514,7 +574,13 @@ const DATA = [
     { name:"Sleep hygiene", modality:"Psychoeducation", how:"Optimize environment and pre-sleep routine." },
     { name:"Light exposure / chronotherapy", modality:"Metabolic / Lifestyle", how:"Align timing cues to improve sleep." },
     { name:"Relaxation training", modality:"Somatic", how:"Lower pre-sleep arousal." },
-    { name:"Sleep study / medical referral", modality:"Medical", how:"Assess apnea and other disorders." }
+    { name:"Sleep study / medical referral", modality:"Medical", how:"Assess apnea and other disorders." },
+    { name:"DORAs", modality:"Psychiatric", how:"Dual Orexin Receptor Antagonists reduce excitability to help transition to sleep." },
+    { name:"Trazodone", modality:"Psychiatric", how:"Common first-line sleep medication." },
+    { name:"Z-Drugs", modality:"Psychiatric", how:"High-efficacy but higher-risk sleep drugs that may cause dependence or next-day drowsiness." },
+    { name:"Non-Medication Sleep Aids", modality:"Medical", how:"3rd-party tested melatonin ≤3mg, L-theanine, magnesium glycinate, apigenin." },
+    { name:"Yoga Nidra", modality:"Somatic", how:"Body scan plus breathing for deep relaxation." },
+    { name:"Mindfulness Interventions", modality:"Mindfulness", how:"Mindfulness activities that help the brain stop noticing the body." }
   ]},
 { pillar:"metabolic", collab:true, target:"Circadian Rhythm",
   why:"Cortisol rhythm and sleep-wake timing can be disrupted even when total sleep is intact — a distinct target. Modern light, screens, and shift schedules are common culprits.",
